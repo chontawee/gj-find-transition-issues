@@ -1,0 +1,15 @@
+name: 'Jira find and transition issues'
+description: 'Find Jira issue keys from commit and transition them to status which you want'
+branding:
+  icon: 'box'
+  color: 'orange'
+inputs:
+  issuetypes:
+    description: The issue types to be transitioned It's relevant with 'transitions' order, e.g, 'Story,Bug,Task'
+    required: true
+  transitions:
+    description: The transitions to apply to the issue. It's relevant with 'issuetypes' order, e.g. 'To Do,In Progress,In Progress'
+    required: true
+runs:
+  using: 'node12'
+  main: 'index.js'
