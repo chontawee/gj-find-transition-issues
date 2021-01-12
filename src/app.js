@@ -16,8 +16,8 @@ class App {
 
     const commitMessages = this.getCommitMessages()
     const issueKeys = this.findIssueKeys(commitMessages)
-    const transitionIds = await this.getTransitionId(issueKeys)
-    await this.transitionIssues(issueKeys, transitionIds)
+    const transitionIssues = await this.getTransitionIdsAndKeys(issueKeys)
+    await this.transitionIssues(transitionIssues.issueKeys, transitionIssues.transitionIds)
   }
 
   validateInput() {
@@ -42,23 +42,30 @@ class App {
     return issueKeys
   }
 
-  async getTransitionId(issues) {
+  async getTransitionIdsAndKeys(issues) {
     const transitionIds = [];
+    const issueKeys = [];
     for (const issue of issues) {
       const issueData = await this.jira.getIssue(issue)
       const issuetypeName = issueData.fields.issuetype.name
+      const issueStatus = issueData.fields.status.statusCategory.name
       const issuetypeIndex = this.issuetypes.indexOf(issuetypeName)
-      const { transitions: availableTransitions } = await this.jira.getIssueTransitions(issue)
-      const designedTransition = availableTransitions.find(eachTransition => eachTransition.name === this.transitions[issuetypeIndex])
-      if (!designedTransition) {
-        throw new Error(`Cannot find transition "${transition}"`)
+      if (this.transitions[issuetypeIndex] !== issueStatus) {
+        issueKeys.push(issue)
+        const { transitions: availableTransitions } = await this.jira.getIssueTransitions(issue)
+        const designedTransition = availableTransitions.find(eachTransition => eachTransition.name === this.transitions[issuetypeIndex])
+        if (!designedTransition) {
+          throw new Error(`Cannot find transition "${transition}"`)
+        }
+        transitionIds.push({
+          id: designedTransition.id,
+          name: designedTransition.name
+        })
+      } else {
+        console.log(`Issue ${issue} is already in ${issueStatus} status`)
       }
-      transitionIds.push({
-        id: designedTransition.id,
-        name: designedTransition.name
-      })
     }
-    return transitionIds
+    return { issueKeys, transitionIds }
   }
 
   async transitionIssues(issues, transitionIds) {
