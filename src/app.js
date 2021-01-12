@@ -50,7 +50,7 @@ class App {
       const issuetypeName = issueData.fields.issuetype.name
       const issueStatus = issueData.fields.status.name
       const issuetypeIndex = this.issuetypes.indexOf(issuetypeName)
-      if (this.transitions[issuetypeIndex] !== issueStatus) {
+      if (this.transitions[issuetypeIndex] !== issueStatus && !issueKeys.includes(issue)) {
         issueKeys.push(issue)
         const { transitions: availableTransitions } = await this.jira.getIssueTransitions(issue)
         const designedTransition = availableTransitions.find(eachTransition => eachTransition.name === this.transitions[issuetypeIndex])
