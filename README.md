@@ -3,7 +3,7 @@ Find issue keys from commit messages and transition them to status which you wan
 ## Usage
 ```yaml
 - name: Jira find and transition issues
-  uses: chontawee/gj-find-transition-issues@1.0.1
+  uses: chontawee/gj-find-transition-issues@1.0.4
   env:
     JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
     JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}

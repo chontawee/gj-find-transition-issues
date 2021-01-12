@@ -22,6 +22,5 @@ try {
   const app = new App(event, issuetypes, transitions)
   app.init()
 } catch (error) {
-  console.error(error)
   core.setFailed(error.toString())
 }
