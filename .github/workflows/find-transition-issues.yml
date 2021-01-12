@@ -11,7 +11,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
 
-    - name: Find Issue Key
+    - name: Find and Transition Issue Key
       uses: ./
       env:
         JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
