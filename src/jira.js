@@ -1,29 +1,44 @@
-class Jira {
+const axios = require("axios");
+const core = require("@actions/core");
 
-  constructor(httpClient) {
-    this.httpClient = httpClient
+class Jira {
+  constructor() {
+    const userEmail = core.getInput("jira-user-email");
+    const apiToken = core.getInput("jira-api-token");
+    const baseUrl = core.getInput("jira-base-url");
+    const token = Buffer.from(`${userEmail}:${apiToken}`).toString("base64");
+
+    this.api = axios.create({
+      baseURL: `${baseUrl}/rest/api/3`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Basic ${token}`,
+      },
+    });
   }
 
   async getIssue(issueId) {
-    const path = `issue/${issueId}`
-    return this.httpClient.get(path)
+    const path = `issue/${issueId}`;
+    const { data } = await this.api.get(path);
+    return data;
   }
 
   async getIssueTransitions(issueId) {
-    const path = `issue/${issueId}/transitions`
-    return this.httpClient.get(path)
+    const path = `issue/${issueId}/transitions`;
+    const { data } = await this.api.get(path);
+    return data;
   }
 
   async transitionIssue(issueId, transitionId) {
-    const path = `issue/${issueId}/transitions`
+    const path = `issue/${issueId}/transitions`;
     const body = {
       transition: {
-        id: transitionId
-      }
-    }
-    return this.httpClient.post(path, body)
+        id: transitionId,
+      },
+    };
+    const { data } = await this.api.post(path, body);
+    return data;
   }
-
 }
 
-module.exports = Jira
+module.exports = Jira;
