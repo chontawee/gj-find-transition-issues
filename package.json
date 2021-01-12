@@ -1,6 +1,6 @@
 {
   "name": "chontawee/gj-find-transition-issues",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "github actions for finding and transitioning jira issues",
   "main": "index.js",
   "repository": {
