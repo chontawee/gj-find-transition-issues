@@ -1,12 +1,10 @@
 {
   "name": "@bloobirds-it/action-transition-multiple-jira-issues",
-  "version": "1.0.4",
-  "description": "Transition multiple jira issues from pull request",
+  "version": "2.0.0",
+  "description": "Find Jira issue keys from commit messages in pull requests and transition them",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "build": "ncc build index.js --minify",
-    "watch": "ncc build index.js --watch --minify"
+    "build": "ncc build index.js --minify"
   },
   "dependencies": {
     "@actions/core": "^1.2.6",
