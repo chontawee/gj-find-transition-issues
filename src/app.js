@@ -3,8 +3,8 @@ const Jira = require('./jira')
 
 class App {
 
-  constructor(githubEvent, issuetypes, transitions) {
-    this.githubEvent = githubEvent
+  constructor(event, issuetypes, transitions) {
+    this.event = event
     this.issuetypes = issuetypes
     this.transitions = transitions
     this.httpClient = new HttpClient()
@@ -27,7 +27,7 @@ class App {
   }
 
   getCommitMessages() {
-    const commitMessages = this.githubEvent.event.commits.map(commit => commit.message).join(' ')
+    const commitMessages = this.event.commits.map(commit => commit.message).join(' ')
     console.log(`Commit messages: ${commitMessages}`)
     return commitMessages
   }
