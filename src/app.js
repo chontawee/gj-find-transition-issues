@@ -48,7 +48,7 @@ class App {
     for (const issue of issues) {
       const issueData = await this.jira.getIssue(issue)
       const issuetypeName = issueData.fields.issuetype.name
-      const issueStatus = issueData.fields.status.statusCategory.name
+      const issueStatus = issueData.fields.status.name
       const issuetypeIndex = this.issuetypes.indexOf(issuetypeName)
       if (this.transitions[issuetypeIndex] !== issueStatus) {
         issueKeys.push(issue)
