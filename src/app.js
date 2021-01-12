@@ -34,7 +34,8 @@ class App {
 
   findIssueKeys(commitMessages) {
     const issueIdRegEx = /([a-zA-Z0-9]+-[0-9]+)/g
-    const issueKeys = commitMessages.match(issueIdRegEx)
+    // Get issue keys and remove duplicate keys
+    const issueKeys = commitMessages.match(issueIdRegEx).filter((elem, index, self) => index === self.indexOf(elem))
     if (!issueKeys) {
       throw new Error(`Commit messages doesn't contain any issue keys`)
     }
@@ -50,18 +51,19 @@ class App {
       const issuetypeName = issueData.fields.issuetype.name
       const issueStatus = issueData.fields.status.name
       const issuetypeIndex = this.issuetypes.indexOf(issuetypeName)
-      if (this.transitions[issuetypeIndex] !== issueStatus && !issueKeys.includes(issue)) {
+      
+      if (this.transitions[issuetypeIndex] !== issueStatus) { // current status !== transition status
         issueKeys.push(issue)
         const { transitions: availableTransitions } = await this.jira.getIssueTransitions(issue)
         const designedTransition = availableTransitions.find(eachTransition => eachTransition.name === this.transitions[issuetypeIndex])
         if (!designedTransition) {
-          throw new Error(`Cannot find transition "${transition}"`)
+          throw new Error(`Cannot find transition "${this.transitions[issuetypeIndex]}"`)
         }
         transitionIds.push({
           id: designedTransition.id,
           name: designedTransition.name
         })
-      } else {
+      } else { // current status === transition status
         console.log(`Issue ${issue} is already in ${issueStatus} status`)
       }
     }
