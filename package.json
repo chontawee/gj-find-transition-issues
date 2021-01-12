@@ -1,15 +1,23 @@
 {
-  "name": "gj-find-transition-issues",
+  "name": "chontawee/gj-find-transition-issues",
   "version": "1.0.0",
-  "description": "",
+  "description": "github actions for finding and transitioning jira issues",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chontawee/gj-find-transition-issues.git"
+  },
   "scripts": {
     "start": "node index.js",
     "build": "ncc build index.js --minify",
     "watch": "ncc build index.js --watch --minify"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "github actions",
+    "github",
+    "jira"
+  ],
+  "author": "Chontawee Wongpromrat",
   "license": "ISC",
   "dependencies": {
     "@actions/core": "^1.2.6",
