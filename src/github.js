@@ -4,6 +4,11 @@ const core = require("@actions/core");
 class Github {
   constructor() {
     const token = core.getInput("github-token");
+
+    if (!token) {
+      throw new Error("Missing GitHub token input");
+    }
+
     this.octokit = github.getOctokit(token);
   }
 

@@ -1,17 +1,37 @@
+const core = require("@actions/core");
 const Jira = require("./jira");
 const Github = require("./github");
 
 class App {
-  constructor(issueTypes, transitions) {
-    this.issueTypes = issueTypes;
-    this.transitions = transitions;
+  constructor() {
+    const issueTypes = core.getInput("issue-types");
+    const transitions = core.getInput("transitions");
+
+    if (!issueTypes || !transitions) {
+      throw new Error("Missing issue types or transitions");
+    }
+
+    if (issueTypes.length !== transitions.length) {
+      throw new Error("Length of issue-types does not match transitions");
+    }
+
+    this.issueTypes = issueTypes.split(/,\s*/);
+    this.transitions = transitions.split(/,\s*/);
     this.jira = new Jira();
     this.github = new Github();
   }
 
-  async init() {
-    const commitMessages = this.getCommitMessages();
+  async run() {
+    const commitMessages = await this.github.getPullRequestCommitMessages();
+    console.log(`Commit messages: ${commitMessages.join(" ")}`);
+
     const issueKeys = this.findIssueKeys(commitMessages);
+    if (!issueKeys) {
+      console.log(`Commit messages doesn't contain any issue keys`);
+      return;
+    }
+
+    console.log(`Found issue keys: ${issueKeys.join(" ")}`);
     const transitionIssues = await this.getTransitionIdsAndKeys(issueKeys);
     await this.transitionIssues(
       transitionIssues.issueKeys,
@@ -19,23 +39,11 @@ class App {
     );
   }
 
-  async getCommitMessages() {
-    const commitMessages = await this.github.getPullRequestCommitMessages();
-    console.log(`Commit messages: ${commitMessages.join(" ")}`);
-    return commitMessages;
-  }
-
   findIssueKeys(commitMessages) {
     const issueIdRegEx = /([a-zA-Z0-9]+-[0-9]+)/g;
     const matches = commitMessages.join(" ").match(issueIdRegEx);
-    const issueKeys = [...new Set(matches)];
-
-    if (!issueKeys) {
-      throw new Error(`Commit messages doesn't contain any issue keys`);
-    }
-
-    console.log(`Found issue keys: ${issueKeys.join(" ")}`);
-    return issueKeys;
+    if (!matches) return [];
+    return [...new Set(matches)];
   }
 
   async getTransitionIdsAndKeys(issues) {

@@ -6,8 +6,12 @@ class Jira {
     const userEmail = core.getInput("jira-user-email");
     const apiToken = core.getInput("jira-api-token");
     const baseUrl = core.getInput("jira-base-url");
-    const token = Buffer.from(`${userEmail}:${apiToken}`).toString("base64");
 
+    if (!userEmail || !apiToken || !baseUrl) {
+      throw new Error("Missing Jira input argument");
+    }
+
+    const token = Buffer.from(`${userEmail}:${apiToken}`).toString("base64");
     this.api = axios.create({
       baseURL: `${baseUrl}/rest/api/3`,
       headers: {

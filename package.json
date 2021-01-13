@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "description": "Find Jira issue keys from commit messages in pull requests and transition them",
   "main": "index.js",
+  "license": "ISC",
   "scripts": {
     "build": "ncc build index.js --minify"
   },
