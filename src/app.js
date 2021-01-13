@@ -11,12 +11,13 @@ class App {
       throw new Error("Missing issue types or transitions");
     }
 
-    if (issueTypes.length !== transitions.length) {
+    this.issueTypes = issueTypes.split(/,\s*/);
+    this.transitions = transitions.split(/,\s*/);
+
+    if (this.issueTypes.length !== this.transitions.length) {
       throw new Error("Length of issue-types does not match transitions");
     }
 
-    this.issueTypes = issueTypes.split(/,\s*/);
-    this.transitions = transitions.split(/,\s*/);
     this.jira = new Jira();
     this.github = new Github();
   }
