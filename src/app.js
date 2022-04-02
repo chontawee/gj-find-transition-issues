@@ -76,10 +76,10 @@ class App {
     return { issueKeys, transitionIds }
   }
 
-  async transitionIssues(issues, transitionIds) {
-    for (let i=0; i<issues.length; i++) {
-      console.log(`Transitioning issue "${issues[i]}" to "${transitionIds[i].name}"`)
-      await this.jira.transitionIssue(issues[i], transitionIds[i].id)
+  async transitionIssues(issueKeys, transitionIds) {
+    for (let i=0; i<issueKeys.length; i++) {
+      console.log(`Transitioning issue "${issueKeys[i]}" to "${transitionIds[i].name}"`)
+      await this.jira.transitionIssue(issueKeys[i], transitionIds[i].id)
     }
   }
 
