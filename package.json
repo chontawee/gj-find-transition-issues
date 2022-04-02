@@ -1,11 +1,11 @@
 {
-  "name": "chontawee/gj-find-transition-issues",
-  "version": "1.0.4",
-  "description": "github actions for finding and transitioning jira issues",
+  "name": "cyasmanygutierrez/gj-find-transition-issues",
+  "version": "0.1-beta",
+  "description": "github actions for finding and transitioning jira issues based on chontawee/gj-find-transition-issues",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/chontawee/gj-find-transition-issues.git"
+    "url": "https://github.com/yasmanygutierrez/gj-find-transition-issues.git"
   },
   "scripts": {
     "start": "node index.js",
